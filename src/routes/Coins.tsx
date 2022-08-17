@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCoins } from '../api';
+import { useSetRecoilState } from 'recoil';
+import { isDarkAtom } from '../atoms';
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -19,7 +21,7 @@ const CoinList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
   a {
@@ -62,6 +64,7 @@ const Img = styled.img`
 `;
 
 function Coins() {
+  const setterFn = useSetRecoilState(isDarkAtom);
   const { isLoading, data } = useQuery<ICoin[]>(['allCoins'], fetchCoins);
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
   // const [loading, setLoading] = useState(false);
@@ -77,6 +80,7 @@ function Coins() {
     <Container>
       <Header>
         <Title>Coins</Title>
+        <button onClick={() => setterFn((prev) => !prev)}>ToggleMode</button>
       </Header>
       {isLoading ? (
         <Loader>loading..</Loader>
