@@ -14,9 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <div>
     <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={darkTheme}>
         <App />
-      </QueryClientProvider>
+      </ThemeProvider>
     </RecoilRoot>
   </div>
 );

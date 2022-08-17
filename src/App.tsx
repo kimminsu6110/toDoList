@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { RecoilState, useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { isDarkAtom } from './atoms';
-import Router from './Router';
 import { lightTheme, darkTheme } from './theme';
+import ToDoList from './Components/ToDoList';
+import { useForm } from 'react-hook-form';
+
+import { categoryState, IToDo, toDoState } from './Components/atoms';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
@@ -69,13 +71,23 @@ a{
 `;
 
 function App() {
-  const isDark = useRecoilValue(isDarkAtom);
+  const setToDos = useSetRecoilState(toDoState);
+  useEffect(() => {
+    if (localStorage.tdl == undefined) {
+      localStorage.setItem('tdl', JSON.stringify([]));
+    }
+    let t = localStorage.getItem('tdl');
+    if (t == null) {
+    } else {
+      let tdl = JSON.parse(t);
+      setToDos(tdl);
+    }
+  }, []);
+
   return (
     <>
-      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        <GlobalStyle />
-        <Router />
-      </ThemeProvider>
+      <GlobalStyle />
+      <ToDoList />
     </>
   );
 }
